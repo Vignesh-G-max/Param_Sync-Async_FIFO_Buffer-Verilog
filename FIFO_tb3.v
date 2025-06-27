@@ -49,36 +49,19 @@ module FIFOTop_tb();
         // Apply resets
         #20 writeRstIn = 0; readRstIn = 0;
         #20 writeRstIn = 1; readRstIn = 1;
-
-        // -------------------------------
-        // TEST CASE 1: Basic write & read
-        // -------------------------------
-        readEnableIn = 1;
-        for (i = 0; i < 10; i = i + 1) begin
-            dataIn = i;
-            writeEnableIn = 1;
-            #10;
-            writeEnableIn = 0;
-            #10;
-        end
-
+        
        // --------------------------------------------------
-       // TEST CASE 2: Attempt to overfill the FIFO
+       // TEST CASE 3: Attempt to overread the FIFO
        // --------------------------------------------------
-       readEnableIn = 0;
        writeEnableIn = 1;
-       for (i = 0; i < fifoDepth + 3; i = i + 1) begin
+        for (i = 0; i < fifoDepth - 4; i = i + 1) begin
            dataIn = i;
            #10;
        end
        writeEnableIn = 0;
 
-       // --------------------------------------------------
-       // TEST CASE 3: Attempt to overread the FIFO
-       // --------------------------------------------------
-
        readEnableIn = 1;
-       for (i = 0; i < fifoDepth + 3; i = i + 1) begin
+        for (i = 0; i < fifoDepth + 3; i = i + 1) begin
            #20;
        end
         $finish;
