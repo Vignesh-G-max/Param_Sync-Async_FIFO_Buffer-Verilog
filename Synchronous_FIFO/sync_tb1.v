@@ -2,7 +2,7 @@
 
 `timescale 1ns/1ns
 
-module tb_fifoSync;
+module FIFO_Sync_tb;
 
   // Parameters
   parameter DEPTH = 8;
@@ -72,9 +72,12 @@ module tb_fifoSync;
     #10;
     @(posedge clk);
     rstN = 1;
-
+    // ---------------------------------------------------------
+    // Test Case 1: Simple Write then Read
+    // Purpose: Verify basic FIFO operation and data ordering
+    // ---------------------------------------------------------
     for (i = 0; i < DEPTH; i = i + 1) begin
-      writeData(2**i);
+      writeData(i);
       readData();
     end
     #20 $finish;
