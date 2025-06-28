@@ -20,7 +20,7 @@ module sync_tb;
   integer i;
 
   // Instantiate the FIFO
-  fifoSync #(
+  FIFO_Sync #(
     .DEPTH(DEPTH),
     .WIDTH(WIDTH)
   ) dut (
