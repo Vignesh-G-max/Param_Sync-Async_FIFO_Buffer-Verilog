@@ -1,8 +1,6 @@
-// Testbench for fifoSync 
-
 `timescale 1ns/1ns
 
-module FIFO_Sync_tb;
+module sync_tb;
 
   // Parameters
   parameter DEPTH = 8;
@@ -21,7 +19,7 @@ module FIFO_Sync_tb;
   integer i;
 
   // Instantiate the FIFO
-  fifoSync #(
+  FIFO_Sync #(
     .DEPTH(DEPTH),
     .WIDTH(WIDTH)
   ) dut (
@@ -44,7 +42,6 @@ module FIFO_Sync_tb;
       @(posedge clk);
       wrEn = 1;
       dataIn = d;
-      $display("%0t: WRITE -> %0d", $time, dataIn);
       @(posedge clk);
       wrEn = 0;
     end
@@ -56,7 +53,6 @@ module FIFO_Sync_tb;
       @(posedge clk);
       rdEn = 1;
       @(posedge clk);
-      $display("%0t: READ  -> %0d", $time, dataOut);
       rdEn = 0;
     end
   endtask
@@ -64,22 +60,24 @@ module FIFO_Sync_tb;
   // Stimulus
   initial begin
     // Initial reset
-    rstN = 1; 
-    #10;
     rstN = 0;
     wrEn = 0;
     rdEn = 0;
-    #10;
+    #2;
     @(posedge clk);
     rstN = 1;
+
     // ---------------------------------------------------------
-    // Test Case 1: Simple Write then Read
-    // Purpose: Verify basic FIFO operation and data ordering
+    // TEST CASE 1: Simultaneous Write and Read (interleaved)
+    // Purpose: Check handling of write followed immediately by read
     // ---------------------------------------------------------
     for (i = 0; i < DEPTH; i = i + 1) begin
-      writeData(i);
-      readData();
+      writeData(i);  // Write data 50, 51, ...
+      readData();         // Immediately read on next cycle
     end
-    #20 $finish;
+
+    #40 $finish;
   end
+
+
 endmodule
